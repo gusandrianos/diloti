@@ -10,7 +10,11 @@ internal data class Match(
         mapOf(players.first to 0, players.second to 0)
     ) { score, game ->
         score.mapValues { (player, score) ->
-            score + (game.score[player] ?: 0)
+            if (!game.inProgress) {
+                score + ((game.score[player] ?: 0) / 61).coerceAtMost(1)
+            } else {
+                score
+            }
         }
     }
     val winner: Player? = score.maxByOrNull {
