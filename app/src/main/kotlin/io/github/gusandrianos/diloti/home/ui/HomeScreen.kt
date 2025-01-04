@@ -31,7 +31,7 @@ internal fun HomeScreenRoute(
     homeViewModel: HomeViewModel = koinViewModel()
 ) {
     val state by homeViewModel.state.collectAsStateWithLifecycle()
-    HomeScreen(state)
+    DilotiTheme { HomeScreen(state) }
 }
 
 @Composable
