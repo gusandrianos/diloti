@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Diloti</string>
+
+    <string name="match_details_game_title_placeholder">Game %1$s</string>
 </resources>
