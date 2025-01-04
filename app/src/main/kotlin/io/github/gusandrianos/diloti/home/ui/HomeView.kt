@@ -1,3 +1,5 @@
+@file:JvmName("HomeViewModelKt")
+
 package io.github.gusandrianos.diloti.home.ui
 
 import io.github.gusandrianos.diloti.game.domain.model.Game
@@ -6,13 +8,13 @@ import io.github.gusandrianos.diloti.game.domain.model.Player
 import io.github.gusandrianos.diloti.game.domain.model.Round
 import java.time.Instant
 
-internal class HomeScreenView {
+internal class HomeView {
     data class State(
         val games: List<Match>
     )
 }
 
-internal val tempState = HomeScreenView.State(
+internal val tempState = HomeView.State(
     listOf(
         Match(
             name = "Match 1",
