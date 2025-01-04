@@ -10,7 +10,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import io.github.gusandrianos.diloti.home.di.homeModule
 import io.github.gusandrianos.diloti.home.ui.HomeScreenRoute
+import io.github.gusandrianos.diloti.match.di.matchModule
+import io.github.gusandrianos.diloti.match.ui.MatchScreenRoute
 import io.github.gusandrianos.diloti.navigation.Home
+import io.github.gusandrianos.diloti.navigation.Match
 import org.koin.compose.KoinApplication
 
 class MainActivity : ComponentActivity() {
@@ -27,7 +30,10 @@ class MainActivity : ComponentActivity() {
 fun DilotiApp() {
     KoinApplication(
         application = {
-            modules(homeModule)
+            modules(
+                homeModule,
+                matchModule
+            )
         }
     ) {
         Screens()
@@ -39,7 +45,16 @@ fun Screens() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Home) {
         composable<Home> {
-            HomeScreenRoute()
+            HomeScreenRoute(
+                onNavigateToMatch = {
+                    navController.navigate(Match)
+                }
+            )
+        }
+        composable<Match> {
+            MatchScreenRoute {
+                navController.popBackStack()
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package io.github.gusandrianos.diloti.home.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -30,16 +31,22 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun HomeScreenRoute(
-    homeViewModel: HomeViewModel = koinViewModel()
+    homeViewModel: HomeViewModel = koinViewModel(),
+    onNavigateToMatch: () -> Unit
 ) {
     val state by homeViewModel.state.collectAsStateWithLifecycle()
-    DilotiTheme { HomeScreen(state) }
+    DilotiTheme {
+        HomeScreen(state) {
+            onNavigateToMatch()
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeScreen(
-    state: HomeView.State
+    state: HomeView.State,
+    onNavigateToMatch: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -60,7 +67,7 @@ private fun HomeScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 8.dp)
-                )
+                ) { onNavigateToMatch() }
             }
         }
     }
@@ -68,10 +75,11 @@ private fun HomeScreen(
 
 @Composable
 private fun Match(
+    modifier: Modifier = Modifier,
     match: Match,
-    modifier: Modifier = Modifier
+    onClick: () -> Unit
 ) {
-    Column(modifier) {
+    Column(modifier.clickable { onClick() }) {
         Text(text = match.name, style = MaterialTheme.typography.headlineSmall)
         HorizontalDivider(thickness = 1.dp, modifier = Modifier.padding(vertical = 4.dp))
         for (entry in match.score) {
@@ -102,7 +110,7 @@ private fun PlayerRow(
 private fun HomeScreenPreview() {
     DilotiTheme {
         Surface {
-            HomeScreen(tempState)
+            HomeScreen(tempState) {}
         }
     }
 }
