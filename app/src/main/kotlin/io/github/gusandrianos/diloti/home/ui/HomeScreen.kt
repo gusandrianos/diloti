@@ -1,15 +1,10 @@
 package io.github.gusandrianos.diloti.home.ui
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -19,13 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.gusandrianos.diloti.R
-import io.github.gusandrianos.diloti.game.domain.model.Match
-import io.github.gusandrianos.diloti.game.domain.model.Player
+import io.github.gusandrianos.diloti.ui.ScoreRow
 import io.github.gusandrianos.diloti.ui.theme.DilotiTheme
 import org.koin.androidx.compose.koinViewModel
 
@@ -62,48 +55,18 @@ private fun HomeScreen(
     ) { contentPadding ->
         LazyColumn(modifier = Modifier.padding(contentPadding)) {
             items(state.games) {
-                Match(
-                    match = it,
+                ScoreRow(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-                ) { onNavigateToMatch() }
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    title = it.name,
+                    scores = it.score,
+                    onClick = onNavigateToMatch
+                )
             }
         }
     }
 }
-
-@Composable
-private fun Match(
-    modifier: Modifier = Modifier,
-    match: Match,
-    onClick: () -> Unit
-) {
-    Column(modifier.clickable { onClick() }) {
-        Text(text = match.name, style = MaterialTheme.typography.headlineSmall)
-        HorizontalDivider(thickness = 1.dp, modifier = Modifier.padding(vertical = 4.dp))
-        for (entry in match.score) {
-            PlayerRow(player = entry.key, score = entry.value, modifier = Modifier.padding(2.dp))
-        }
-    }
-}
-
-@Composable
-private fun PlayerRow(
-    player: Player,
-    score: Int,
-    modifier: Modifier = Modifier
-) {
-    Row(modifier = modifier) {
-        Text(text = player.name)
-        Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = score.toString(),
-            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
-        )
-    }
-}
-
 
 @Preview
 @Composable
