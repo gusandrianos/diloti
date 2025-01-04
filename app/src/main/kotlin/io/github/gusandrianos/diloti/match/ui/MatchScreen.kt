@@ -1,6 +1,7 @@
 package io.github.gusandrianos.diloti.match.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,11 +36,12 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 internal fun MatchScreenRoute(
     matchViewModel: MatchViewModel = koinViewModel(),
+    onGamePressed: () -> Unit,
     onBackPressed: () -> Unit
 ) {
     val state by matchViewModel.state.collectAsStateWithLifecycle()
     DilotiTheme {
-        MatchScreen(state) { onBackPressed() }
+        MatchScreen(state, onGamePressed) { onBackPressed() }
     }
 }
 
@@ -47,6 +49,7 @@ internal fun MatchScreenRoute(
 @Composable
 private fun MatchScreen(
     state: MatchView.State,
+    onGamePressed: () -> Unit,
     onBackPressed: () -> Unit
 ) {
     Scaffold(
@@ -78,7 +81,7 @@ private fun MatchScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 8.dp)
-                )
+                ) { onGamePressed() }
             }
         }
     }
@@ -88,9 +91,10 @@ private fun MatchScreen(
 private fun Game(
     game: Game,
     index: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onGamePressed: () -> Unit,
 ) {
-    Column(modifier) {
+    Column(modifier.clickable { onGamePressed() }) {
         Text(
             text = stringResource(R.string.match_details_game_title_placeholder, index),
             style = MaterialTheme.typography.headlineSmall
@@ -124,7 +128,11 @@ private fun PlayerRow(
 private fun MatchScreenPreview() {
     DilotiTheme {
         Surface {
-            MatchScreen(tempMatchState) {}
+            MatchScreen(
+                state = tempMatchState,
+                onBackPressed = {},
+                onGamePressed = {}
+            )
         }
     }
 }

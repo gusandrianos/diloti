@@ -8,10 +8,13 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import io.github.gusandrianos.diloti.game_details.di.gameDetailsModule
+import io.github.gusandrianos.diloti.game_details.ui.GameDetailsScreenRoute
 import io.github.gusandrianos.diloti.home.di.homeModule
 import io.github.gusandrianos.diloti.home.ui.HomeScreenRoute
 import io.github.gusandrianos.diloti.match.di.matchModule
 import io.github.gusandrianos.diloti.match.ui.MatchScreenRoute
+import io.github.gusandrianos.diloti.navigation.GameDetails
 import io.github.gusandrianos.diloti.navigation.Home
 import io.github.gusandrianos.diloti.navigation.Match
 import org.koin.compose.KoinApplication
@@ -32,7 +35,8 @@ fun DilotiApp() {
         application = {
             modules(
                 homeModule,
-                matchModule
+                matchModule,
+                gameDetailsModule
             )
         }
     ) {
@@ -52,7 +56,17 @@ fun Screens() {
             )
         }
         composable<Match> {
-            MatchScreenRoute {
+            MatchScreenRoute(
+                onGamePressed = {
+                    navController.navigate(GameDetails)
+                },
+                onBackPressed = {
+                    navController.popBackStack()
+                }
+            )
+        }
+        composable<GameDetails> {
+            GameDetailsScreenRoute {
                 navController.popBackStack()
             }
         }

@@ -7,3 +7,6 @@ object Home
 
 @Serializable
 object Match
+
+@Serializable
+object GameDetails
